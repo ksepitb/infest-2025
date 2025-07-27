@@ -121,10 +121,10 @@ const Navbar = () => {
           })}
 
           <Link
-            href="/daftar"
+            href="/login"
             className="inset-shadow-sm inset-shadow-indigo-500 hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
           >
-            Daftar
+            Login
           </Link>
 
           <div className="md:hidden">
@@ -180,11 +180,11 @@ const Navbar = () => {
             );
           })}
           <Link
-            href="/daftar"
+            href="/login"
             onClick={() => setMobileMenuOpen(false)}
             className="inset-shadow-sm inset-shadow-indigo-500 mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
           >
-            Daftar
+            Login
           </Link>
         </nav>
       </div>
