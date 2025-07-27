@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+"use client";
+
+import { useActionState, useEffect } from "react";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import Image from "next/image";
@@ -6,8 +8,12 @@ import Ornament1 from "@/public/ornament1.svg";
 import Ornament2 from "@/public/ornament2.svg";
 import Logo from "@/public/logo-ksepp.png";
 import { ArrowRight } from "lucide-react";
+import { login } from "@/app/login/actions";
+import { useFormStatus } from "react-dom";
 
 const LoginForm = () =>  {
+  const [state, loginAction] = useActionState(login, undefined);
+
   return (
     <div className="relative h-screen w-full isolate overflow-hidden">
          <div className="relative h-screen w-full isolate overflow-hidden">
@@ -27,7 +33,7 @@ const LoginForm = () =>  {
             Login
           </h1>
           <div className="w-full max-w-2xl mx-auto bg-[#240046]/80 backdrop-blur-lg p-8 rounded-2xl border border-white/20 shadow-2xl text-center animate-fade-in" data-aos="fade-up">
-            <form className="flex flex-col gap-4">
+            <form className="flex flex-col gap-6" action={loginAction}>
                 <div>
                   <label
                     htmlFor="email"
@@ -36,14 +42,18 @@ const LoginForm = () =>  {
                     Nama Kelompok <span className="text-red-400">*</span>
                   </label> 
                   <input
-                    type="email"
+                    type="text"
                     id="email"
                     placeholder="Email"
-                    required
+                    name="email"
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
+                  {state?.errors?.email && (
+                    <p className="text-red-500 text-sm mt-2 text-left">
+                      {state?.errors?.email}
+                    </p>
+                  )}
                   </div>
-
                 <div>
                   <label
                     htmlFor="password"
@@ -55,9 +65,14 @@ const LoginForm = () =>  {
                     type="password"
                     id="password"
                     placeholder="Password"
-                    required
+                    name="password"
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                     />
+                  {state?.errors?.password && (
+                    <p className="text-red-500 text-sm mt-2 text-left">
+                      {state?.errors?.password}
+                    </p>
+                  )}
                 </div>
                 <SubmitButton />
             </form>
@@ -69,9 +84,12 @@ const LoginForm = () =>  {
 }
 
 const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
   return (
   <button
-    type="button"
+    type="submit"
+    disabled={pending}
     className="flex mx-auto items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700"
   >
     Login

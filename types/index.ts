@@ -56,3 +56,9 @@ export interface TimelineProps {
   timelineData: TimelineEvent[];
 }
 
+export interface User {
+  id: string,
+  email: string,
+  password: string,
+  namaTim: string,
+}

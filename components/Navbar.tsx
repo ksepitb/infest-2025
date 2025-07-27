@@ -6,6 +6,8 @@ import Image from "next/image";
 import Logo from "@/public/logo-ksep.png";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { User } from "@/types";
+import { logout } from "@/app/login/actions";
 interface NavLink {
   name: string;
   href: string;
@@ -50,11 +52,52 @@ const CloseIcon = ({ className = "" }) => (
   </svg>
 );
 
+
 const Navbar = () => {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true);
   const lastScrollY = useRef(0);
+
+  const checkSession = async () => {
+    try {
+      const res = await fetch('/api/session')
+      if (res.ok) {
+        const userData = await res.json();
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
+    } catch (err) {
+      console.error("Error checking session", err);
+      setUser(null);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+ 
+  useEffect( () => {   
+    checkSession();
+
+    const handleAuthChange = () => {
+      checkSession();
+    }
+
+    window.addEventListener('auth-change', handleAuthChange);
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange);
+    };
+  }, [])
+
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
+    setMobileMenuOpen(false);
+
+    window.dispatchEvent(new Event('auth-change'))
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -120,12 +163,25 @@ const Navbar = () => {
             );
           })}
 
-          <Link
-            href="/login"
-            className="inset-shadow-sm inset-shadow-indigo-500 hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
-          >
-            Login
-          </Link>
+          {isLoading ? (
+            <div className="hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full py-2 px-8">
+              Loading...
+            </div>
+          ) : user ? (
+            <button
+              onClick={handleLogout}
+              className="hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
+            >
+              {user.namaTim} | Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
+            >
+              Login
+            </Link>
+          )}
 
           <div className="md:hidden">
             <button onClick={() => setMobileMenuOpen(true)} className="p-2">
@@ -179,13 +235,22 @@ const Navbar = () => {
               </Link>
             );
           })}
-          <Link
-            href="/login"
-            onClick={() => setMobileMenuOpen(false)}
-            className="inset-shadow-sm inset-shadow-indigo-500 mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
-          >
-            Login
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12 hover:cursor-pointer"
+            >
+              {user.namaTim} | Logout
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
+            >
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </>
