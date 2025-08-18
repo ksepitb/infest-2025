@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String           @id @default(uuid()) @db.Uuid
+  email           String
+  teamName        String?
+  submissionLink1 String?
+  submissionLink2 String?
+  createdAt       DateTime         @default(now()) @db.Timestamp(6)
+  competitionType CompetitionType?
+
+  @@map("User")
+}
+
+enum CompetitionType {
+  BCC
+  ERC
+}

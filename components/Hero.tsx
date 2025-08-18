@@ -17,7 +17,6 @@ const Hero = () => {
     <section>
       <div className="relative h-screen w-full isolate overflow-hidden">
         <div className="absolute inset-0 z-[-30] h-full w-full bg-gradient-to-b from-[#3B007D] to-[#280068]"></div>
-
         <Image
           src={Ornament1}
           alt="Icon"
@@ -41,7 +40,7 @@ const Hero = () => {
           </p>
 
           <h1
-            className="z-20 bg-gradient-to-b from-white via-[#C899FF] to-white text-transparent bg-clip-text font-bold text-5xl sm:text-7xl md:text-9xl "
+            className="z-20 bg-gradient-to-b from-white via-[#C899FF] to-white text-transparent bg-clip-text font-bold text-5xl xs:text-7xl md:text-9xl "
             data-aos="zoom-in"
           >
             INFEST 2025
@@ -56,14 +55,14 @@ const Hero = () => {
             Investment Festival
           </p>
 
-          <p
-            className="text-sm md:text-base bg-gradient-to-r from-zinc-300 to-violet-300 rounded-[59px] shadow-[0px_4px_22.100000381469727px_0px_rgba(255,255,255,0.50)] text-[#2F016D] font-[600] px-6 py-2 sm:py-3 flex items-center gap-3 animate-float delay-2000"
+          <a
+            className="text-sm md:text-base bg-gradient-to-r from-zinc-300 to-violet-300 rounded-full shadow-[0px_4px_22.100000381469727px_0px_rgba(255,255,255,0.50)] text-[#2F016D] font-[600] px-6 py-2 sm:py-3 flex items-center gap-3 animate-float delay-2000"
             data-aos="fade-up"
-            data-aos-anchor-placement="bottom-bottom"
+            data-aos-anchor-placement="bottom-bottom" href="#main-section"
           >
             Get Started
             <ArrowRight className="text-[#2F016D] w-4 md:w-5" />
-          </p>
+          </a>
         </div>
       </div>
     </section>

@@ -6,15 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.53.0",
+    "@types/formidable": "^3.4.5",
+    "@uploadthing/react": "^7.3.2",
     "aos": "^3.0.0-beta.6",
+    "googleapis": "^150.0.1",
     "lucide-react": "^0.525.0",
     "next": "15.3.4",
+    "next-sitemap": "^4.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "uploadthing": "^7.7.3",
+    "zod": "^4.0.10",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -22,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prisma": "^6.12.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

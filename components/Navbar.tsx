@@ -1,11 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Logo from "@/public/logo-ksep.png";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { truncateString } from "@/utils/utils";
+import { useUserStore } from "@/stores/userStore";
+import { useInitializeUserStore } from "@/hooks/useInitializeUserStore";
+
 interface NavLink {
   name: string;
   href: string;
@@ -16,6 +20,7 @@ const navLinks: NavLink[] = [
   { name: "Event", href: "/event" },
   { name: "ERC", href: "/erc" },
   { name: "BCC", href: "/bcc" },
+  { name: "Daftar", href: "/daftar"}
 ];
 
 const MenuIcon = ({ className = "" }) => (
@@ -55,6 +60,9 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  
+  useInitializeUserStore();
+  const { user, userProfile, isLoading, logout } = useUserStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,15 +85,32 @@ const Navbar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   useEffect(() => {
     Aos.init({
       duration: 1000,
     });
   }, []);
+
+  // Function to get display name
+  const getDisplayName = () => {
+    if (!user) return '';
+    
+    let name = '';
+    
+    if (userProfile) {
+      name = userProfile.teamName;
+    } else {
+      name = user.email?.split('@')[0] || 'User';
+    }
+
+    return truncateString(name, 10); 
+  };
+
   return (
     <>
       <header
-        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[700px] z-50 transition-transform duration-500 ease-in-out ${
+        className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[800px] z-50 transition-transform duration-500 ease-in-out ${
           isVisible ? "translate-y-0" : "-translate-y-24"
         }`}
       >
@@ -120,12 +145,25 @@ const Navbar = () => {
             );
           })}
 
-          <Link
-            href="/daftar"
-            className="inset-shadow-sm inset-shadow-indigo-500 hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
-          >
-            Daftar
-          </Link>
+          {isLoading ? (
+            <div className="hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full py-2 px-8">
+              Loading...
+            </div>
+          ) : user ? (
+            <Link
+              href="/dashboard"
+              className="hidden md:flex cursor-pointer items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
+            >
+              {getDisplayName()}
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="hidden md:flex items-center bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] font-bold rounded-full transition-transform duration-300 hover:scale-105 py-2 px-8"
+            >
+              Login
+            </Link>
+          )}
 
           <div className="md:hidden">
             <button onClick={() => setMobileMenuOpen(true)} className="p-2">
@@ -135,7 +173,6 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* --- Mobile Menu --- */}
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-300 ease-in-out ${
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -179,13 +216,26 @@ const Navbar = () => {
               </Link>
             );
           })}
-          <Link
-            href="/daftar"
-            onClick={() => setMobileMenuOpen(false)}
-            className="inset-shadow-sm inset-shadow-indigo-500 mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
-          >
-            Daftar
-          </Link>
+          {isLoading ? (
+            <div className="mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12">
+              Loading...
+            </div>
+          ) : user ? (
+            <Link
+              href="/dashboard"
+              className="mt-8 text-xl cursor-pointer font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
+            >
+              {getDisplayName()}
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-8 text-xl font-bold bg-gradient-to-r from-[#D9D9D9] to-[#C2A1E9] text-[#420C81] rounded-full py-3 px-12"
+            >
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </>
