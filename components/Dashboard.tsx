@@ -40,15 +40,13 @@ const Dashboard = () => {
     if (competitionType === 'BCC') {
       return {
         uploads: [
-          { id: 1, name: 'Slide Deck', required: true },
-          { id: 2, name: 'Financial Projection', required: true }
+          { id: 1, name: 'Final Deck', required: true },
         ]
       };
     } else if (competitionType === 'ERC') {
       return {
         uploads: [
-          { id: 1, name: 'Paper', required: true },
-          { id: 2, name: 'Valuation', required: true }
+          { id: 1, name: 'Final Deck', required: true },
         ]
       };
     }
@@ -175,7 +173,7 @@ const Dashboard = () => {
     );
   }
 
-  if (userProfile?.competitionType === "ERC" && new Date() > new Date("2025-09-01T05:00:00+07:00")) {
+  if (userProfile?.competitionType === "ERC" && new Date() > new Date("2025-09-30T05:00:00+07:00")) {
     return (
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center text-center text-white p-4 pt-24">
         <div className="w-full max-w-4xl mx-auto mb-8 flex justify-center items-center" data-aos="fade-down">
@@ -188,7 +186,7 @@ const Dashboard = () => {
   }
 
   
-  if (userProfile?.competitionType === "BCC" && new Date() > new Date("2025-09-04T05:00:00+07:00")) {
+  if (userProfile?.competitionType === "BCC" && new Date() > new Date("2025-09-30T05:00:00+07:00")) {
     return (
       <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center text-center text-white p-4 pt-24">
         <div className="w-full max-w-4xl mx-auto mb-8 flex justify-center items-center" data-aos="fade-down">
